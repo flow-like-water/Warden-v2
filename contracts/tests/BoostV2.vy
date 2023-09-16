@@ -4,7 +4,6 @@
 @author CurveFi
 """
 
-
 event Approval:
     _owner: indexed(address)
     _spender: indexed(address)

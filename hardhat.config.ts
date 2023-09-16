@@ -7,25 +7,24 @@ import "@nomiclabs/hardhat-etherscan";
 import "solidity-coverage";
 import "hardhat-gas-reporter";
 import "@nomiclabs/hardhat-vyper";
-import path from 'path';
-import fs from 'fs';
+import path from "path";
+import fs from "fs";
 
 require("dotenv").config();
 
-['fork'].forEach(
-  (folder) => {
-    const tasksPath = path.join(__dirname, 'tasks', folder);
-    fs.readdirSync(tasksPath)
-      .filter((pth) => pth.includes('.ts'))
-      .forEach((task) => {
-        require(`${tasksPath}/${task}`);
-      });
-  }
-);
+/*
+["fork"].forEach((folder) => {
+  const tasksPath = path.join(__dirname, "tasks", folder);
+  fs.readdirSync(tasksPath)
+    .filter((pth) => pth.includes(".ts"))
+    .forEach((task) => {
+      require(`${tasksPath}/${task}`);
+    });
+});*/
 
-const TEST_MNEMONIC = "test test test test test test test test test test test junk";
-const TEST_ACCOUNT = { mnemonic: TEST_MNEMONIC, }
-
+const TEST_MNEMONIC =
+  "test test test test test test test test test test test junk";
+const TEST_ACCOUNT = { mnemonic: TEST_MNEMONIC };
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
@@ -38,8 +37,8 @@ const config: HardhatUserConfig = {
             enabled: true,
             runs: 200,
           },
-        }
-      }
+        },
+      },
     ],
     overrides: {},
   },
@@ -52,36 +51,25 @@ const config: HardhatUserConfig = {
     disambiguatePaths: false,
   },
   networks: {
-    hardhat: {
-      forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/" + (process.env.ALCHEMY_API_KEY || ''),
-        blockNumber: 15169400
-      }
-    },
+    hardhat: {},
     mainnet: {
-      url: process.env.MAINNET_URI || '',
-      accounts: process.env.MAINNET_PRIVATE_KEY ? [process.env.MAINNET_PRIVATE_KEY] : TEST_ACCOUNT,
+      url: "https://rpc.v4.testnet.pulsechain.com",
+      accountsBalance: "10000000000000000000000000000",
     },
-    fork: {
-      url: process.env.FORK_URI || '',
-      accounts: process.env.FORK_PRIVATE_KEY ? [process.env.FORK_PRIVATE_KEY] : TEST_ACCOUNT,
+    mocha: {
+      url: "https://rpc.v4.testnet.pulsechain.com",
+      timeout: 0,
+    },
+    typechain: {
+      outDir: "typechain",
+      target: "ethers-v5",
+      url: "https://rpc.v4.testnet.pulsechain.com",
+    },
+    gasReporter: {
+      enabled: true,
+      url: "https://rpc.v4.testnet.pulsechain.com",
     },
   },
-  mocha: {
-    timeout: 0
-  },
-  etherscan: {
-    // Your API key for Etherscan
-    // Obtain one at https://etherscan.io/
-    apiKey: process.env.ETHERSCAN_API_KEY || ''
-  },
-  typechain: {
-    outDir: "typechain",
-    target: "ethers-v5"
-  },
-  gasReporter: {
-    enabled: true
-  }
 };
 
 export default config;
